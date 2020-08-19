@@ -1,4 +1,4 @@
-package com.mamup.base;
+package com.companion.api.products;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration level="debug">
+    <Appenders>
+        <Console name="Console-Appender" target="SYSTEM_OUT">
+            <JsonLayout eventEol="true" compact="false" includeStacktrace="false">
+                <KeyValuePair key="X-Correlation-Id" value="$${ctx:x-correlation-id:-null}" />
+                <KeyValuePair key="X-Conversation-Id" value="$${ctx:x-conversation-id:-null}" />
+                <KeyValuePair key="application" value="@name@"/>
+            </JsonLayout>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.springframework" level="warn" additivity="false">
+            <AppenderRef ref="Console-Appender"/>
+        </Logger>
+        <Logger name="com.companion.api" level="trace" additivity="false">
+            <AppenderRef ref="Console-Appender"/>
+        </Logger>
+        <Root level="debug">
+            <AppenderRef ref="Console-Appender"/>
+        </Root>
+    </Loggers>
+</Configuration>

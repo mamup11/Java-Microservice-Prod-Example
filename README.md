@@ -24,3 +24,10 @@ To get a more general idea this is the high level products  architecture of the 
 # Backend
 
 This example focus only on the backend side of the project 
+
+
+## Loggin 
+
+Dont forget to mention the choose in logger framework, markers and MDC http://logging.apache.org/log4j/2.x/manual/async.html
+Remember to mention the need to the env variable to async logs
+

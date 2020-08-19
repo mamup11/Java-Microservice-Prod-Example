@@ -1,4 +1,4 @@
-package com.mamup.example.commons.profile.controller.resources;
+package com.companion.api.products.profile.controller.resources;
 
 import lombok.Getter;
 import lombok.Setter;

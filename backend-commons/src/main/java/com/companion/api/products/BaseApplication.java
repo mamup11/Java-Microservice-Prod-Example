@@ -1,4 +1,4 @@
-package com.mamup.example.commons;
+package com.companion.api.products;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
