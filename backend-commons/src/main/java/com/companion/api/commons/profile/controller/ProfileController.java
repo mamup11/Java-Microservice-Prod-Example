@@ -15,10 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Slf4j
 public class ProfileController {
 
-    @PostMapping("/product")
+    @GetMapping("/product")
     public ResponseEntity<?> saveProfile(@RequestBody NewProfileDto newProfileDto) {
         log.info("yeah its one");
-
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return ResponseEntity.ok().build();
     }
 
@@ -28,17 +32,14 @@ public class ProfileController {
         return ResponseEntity.ok().build();
     }
 
-    int count = 0;
     @GetMapping("/products")
     public ResponseEntity<?> getProfile() {
-        MDC.put("x-correlation-id", String.valueOf(count++));
-        MDC.put("x-conversation-id", String.valueOf(count));
         log.trace("This is a trace message");
-        log.debug("This is a debug message");
-        log.info("This is an info message");
-        log.warn("This is a warn message");
-        IllegalArgumentException exception = new IllegalArgumentException("Hi, this is an error");
-        log.error("This is an error message", exception);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return ResponseEntity.ok().build();
     }
 }
