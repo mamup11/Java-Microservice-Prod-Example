@@ -1,4 +1,4 @@
-package com.companion.api.products.profile.controller.resources;
+package com.companion.api.commons.profile.controller.resources;
 
 import lombok.Getter;
 import lombok.Setter;

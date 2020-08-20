@@ -1,7 +1,7 @@
-package com.companion.api.products.profile.controller;
+package com.companion.api.commons.profile.controller;
 
 import com.google.common.base.Preconditions;
-import com.companion.api.products.profile.controller.resources.NewProfileDto;
+import com.companion.api.commons.profile.controller.resources.NewProfileDto;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.http.ResponseEntity;

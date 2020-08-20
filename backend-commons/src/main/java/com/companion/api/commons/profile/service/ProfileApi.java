@@ -1,4 +1,4 @@
-package com.companion.api.products.profile.service;
+package com.companion.api.commons.profile.service;
 
 import org.springframework.stereotype.Service;
 

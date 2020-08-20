@@ -1,4 +1,4 @@
-package com.companion.api.products;
+package com.companion.api.commons;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

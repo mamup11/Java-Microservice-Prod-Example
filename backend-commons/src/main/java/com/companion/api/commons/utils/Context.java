@@ -1,4 +1,4 @@
-package com.companion.api.products.utils;
+package com.companion.api.commons.utils;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
