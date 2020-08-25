@@ -1,32 +1,27 @@
 package com.companion.api.commons.profile.controller;
 
 import com.google.common.base.Preconditions;
-import com.companion.api.commons.profile.controller.resources.NewProfileDto;
+import com.companion.api.commons.profile.controller.resources.Test;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @Slf4j
 public class ProfileController {
 
-    @GetMapping("/product")
-    public ResponseEntity<?> saveProfile(@RequestBody NewProfileDto newProfileDto) {
-        log.info("yeah its one");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    @PostMapping("/product")
+    public ResponseEntity<?> saveProfile(@RequestBody Test test) {
+        log.info("Hello {}", test.getUsername());
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/product/{id}")
+    @PutMapping("/product/{id}")
     public ResponseEntity<?> getProduct(@PathVariable("id") Long productId) {
         Preconditions.checkArgument(productId != null, "The id provided must not be null");
         return ResponseEntity.ok().build();
@@ -34,12 +29,7 @@ public class ProfileController {
 
     @GetMapping("/products")
     public ResponseEntity<?> getProfile() {
-        log.trace("This is a trace message");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        log.info("This is a info message");
         return ResponseEntity.ok().build();
     }
 }

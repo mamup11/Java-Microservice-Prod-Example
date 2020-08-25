@@ -5,7 +5,7 @@
     <groupId>com.companion.api</groupId>
     <artifactId>companion-commons</artifactId>
     <version>1</version>
-    <name>Companion Commons</name>
+    <name>companion-commons</name>
     <description>Base project with dependencies and common code</description>
 
     <properties>

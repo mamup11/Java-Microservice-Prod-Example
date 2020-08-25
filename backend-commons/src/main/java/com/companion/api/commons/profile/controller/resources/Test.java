@@ -5,8 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NewProfileDto {
+public class Test {
     private String username;
-    private String difficulty;
-    private Integer championId;
 }
