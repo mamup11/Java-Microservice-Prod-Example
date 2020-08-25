@@ -21,7 +21,7 @@ public class CachedHttpServletRequest extends HttpServletRequestWrapper {
 
     @Override
     public ServletInputStream getInputStream() throws IOException {
-        final ByteArrayInputStream byteArrayInputStream = new     ByteArrayInputStream(cachedBody.getBytes());
+        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(cachedBody.getBytes());
         return new ServletInputStream() {
             @Override
             public boolean isFinished() {

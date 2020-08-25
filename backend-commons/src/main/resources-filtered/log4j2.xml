@@ -6,7 +6,7 @@
                 <KeyValuePair key="X-Correlation-Id" value="$${ctx:x-correlation-id:-null}" />
                 <KeyValuePair key="X-Conversation-Id" value="$${ctx:x-conversation-id:-null}" />
                 <KeyValuePair key="clientAddress" value="$${ctx:clientAddress:-null}" />
-                <KeyValuePair key="responseTime(ms)" value="$${ctx:response-time:-null}" />
+                <KeyValuePair key="responseTime(ms)" value="$${ctx:responseTime:-null}" />
                 <KeyValuePair key="application" value="@name@"/>
             </JsonLayout>
         </Console>
