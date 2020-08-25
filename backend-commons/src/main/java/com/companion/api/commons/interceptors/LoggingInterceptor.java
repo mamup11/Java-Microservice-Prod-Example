@@ -66,7 +66,7 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
                 log.debug(REQUEST_BASE_LOG + ", RequestBody: {}", request.getMethod(), request.getRequestURI(), body);
             } else {
                 log.info(REQUEST_BASE_LOG, request.getMethod(), request.getRequestURI());
-            }q:
+            }
         }
 
         // Save the start time of the request and the correlation and conversation ID in the request context
