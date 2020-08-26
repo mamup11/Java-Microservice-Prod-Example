@@ -20,6 +20,8 @@ public class ProfileController {
         log.info("Hello {}", test.getUsername());
         Test response = new Test();
         response.setUsername("Hello " + test.getUsername() + " This is a test!");
+        response.setPassword(test.getPassword());
+        response.setInnerTest(test.getInnerTest());
         return ResponseEntity.ok(response);
     }
 

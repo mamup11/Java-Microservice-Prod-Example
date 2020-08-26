@@ -12,6 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This calls configures the request and response to be cached so we can read the request and response as many times
+ * as we want for logging purposes
+ */
 @Component
 public class CachedRequestAndResponseFilter implements Filter {
 

@@ -9,7 +9,6 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,6 +26,12 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
 
     private static final Set<String> LOGGABLE_METHODS = Sets.newHashSet("POST", "PUT", "PATCH");
 
+    private final LoggingMasker loggingMasker;
+
+    public LoggingInterceptor(LoggingMasker loggingMasker) {
+        this.loggingMasker = loggingMasker;
+    }
+
     private String getUUIDifEmpty(String value) {
         if (StringUtils.isBlank(value)) {
             value = UUID.randomUUID().toString();
@@ -34,11 +39,11 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
         return value;
     }
 
-    private void logRequest(HttpServletRequest request) throws UnsupportedEncodingException {
+    private void logRequest(HttpServletRequest request) throws Exception {
         logRequest(REQUEST_START_PREFIX_LOG, request, null);
     }
 
-    private void logRequest(String prefix, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+    private void logRequest(String prefix, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (log.isInfoEnabled()) {
             StringBuilder builder = new StringBuilder();
             builder.append(prefix);
@@ -50,11 +55,12 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
                 builder.append('?').append(payload);
             }
 
+            // If debug is enabled, its suppose to have a body and the request is a custom readable object then log the request body
             if (log.isDebugEnabled() && request instanceof CachedHttpServletRequest &&
                     LOGGABLE_METHODS.contains(request.getMethod())) {
 
                 CachedHttpServletRequest cachedRequest = (CachedHttpServletRequest) request;
-                builder.append(", RequestBody: ").append(cachedRequest.getBody());
+                builder.append(", RequestBody: ").append(loggingMasker.maskJsonMessage(cachedRequest.getBody()));
             }
 
             if (response != null) {
@@ -64,9 +70,10 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
                 builder.append("ms");
 
                 if (log.isDebugEnabled() && response instanceof ContentCachingResponseWrapper) {
-                    builder.append(", ResponseBody: ");
-                    builder.append(new String(((ContentCachingResponseWrapper) response).getContentAsByteArray(),
-                            response.getCharacterEncoding()));
+                    String responseBody = new String(((ContentCachingResponseWrapper) response).getContentAsByteArray(),
+                            response.getCharacterEncoding());
+
+                    builder.append(", ResponseBody: ").append(loggingMasker.maskJsonMessage(responseBody));
                 }
             }
 
@@ -118,6 +125,8 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
         MDC.put(RESPONSE_TIME, String.valueOf(System.currentTimeMillis() - (long) request.getAttribute(REQUEST_START_TIME)));
 
         logRequest(REQUEST_FINISH_PREFIX_LOG, request, response);
+
+        // Set the correlation and conversation IDs in the response headers so the client knows the id of its request
         response.setHeader(X_CORRELATION_ID, (String) request.getAttribute(X_CORRELATION_ID));
         response.setHeader(X_CONVERSATION_ID, (String) request.getAttribute(X_CONVERSATION_ID));
     }

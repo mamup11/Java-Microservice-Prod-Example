@@ -1,6 +1,5 @@
-package com.companion.api.commons;
+package com.companion.api.commons.interceptors;
 
-import com.companion.api.commons.interceptors.LoggingInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -9,10 +8,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * This class configures adds the logging interceptor to the registry so all request are automatically logged
  */
 @Configuration
-public class AppConfig implements WebMvcConfigurer {
+public class InterceptorsConfig implements WebMvcConfigurer {
+
+    private final LoggingMasker loggingMasker;
+
+    public InterceptorsConfig(LoggingMasker loggingMasker) {
+        this.loggingMasker = loggingMasker;
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoggingInterceptor());
+        registry.addInterceptor(new LoggingInterceptor(loggingMasker));
     }
 }

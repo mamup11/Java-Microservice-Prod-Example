@@ -15,17 +15,11 @@ import java.util.stream.Collectors;
 
 public class CachedHttpServletRequest extends HttpServletRequestWrapper {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private String cachedBody;
 
     public CachedHttpServletRequest(HttpServletRequest request) throws IOException {
         super(request);
-
-        // This line sanitises the body string to remove white spaces and line breaks
-        this.cachedBody = OBJECT_MAPPER.readValue(request.getReader()
-                        .lines()
-                        .collect(Collectors.joining(System.lineSeparator())),
-                JsonNode.class).toString();
+        this.cachedBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
     }
 
     @Override
