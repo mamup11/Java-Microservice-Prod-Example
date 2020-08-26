@@ -1,15 +1,15 @@
 package com.companion.api.commons.interceptors;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,22 +17,15 @@ import java.util.UUID;
 public class LoggingInterceptor extends HandlerInterceptorAdapter {
     private static final String X_CORRELATION_ID = "x-correlation-id";
     private static final String X_CONVERSATION_ID = "x-conversation-id";
+    private static final String X_FORWARDED_FOR = "X-Forwarded-For";
+    private static final String X_FORWARDED_PORT = "X-Forwarded-Port";
     private static final String REQUEST_START_TIME = "requestStartTime";
     private static final String CLIENT_ADDRESS = "clientAddress";
     private static final String RESPONSE_TIME = "responseTime";
-    private static final String REQUEST_BASE_LOG = "Starting Method '{}' Path '{}'";
+    private static final String REQUEST_START_PREFIX_LOG = "Starting Request ";
+    private static final String REQUEST_FINISH_PREFIX_LOG = "Finished Request ";
 
     private static final Set<String> LOGGABLE_METHODS = Sets.newHashSet("POST", "PUT", "PATCH");
-
-    private final ObjectMapper mapper;
-    private final boolean logLevelIsInfo;
-    private final boolean logLevelIsDebug;
-
-    public LoggingInterceptor(ObjectMapper objectMapper) {
-        this.mapper = objectMapper;
-        this.logLevelIsInfo = log.isInfoEnabled() && !log.isDebugEnabled();
-        this.logLevelIsDebug = log.isDebugEnabled();
-    }
 
     private String getUUIDifEmpty(String value) {
         if (StringUtils.isBlank(value)) {
@@ -41,33 +34,76 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
         return value;
     }
 
+    private void logRequest(HttpServletRequest request) throws UnsupportedEncodingException {
+        logRequest(REQUEST_START_PREFIX_LOG, request, null);
+    }
+
+    private void logRequest(String prefix, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        if (log.isInfoEnabled()) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(prefix);
+            builder.append(request.getMethod()).append(" ");
+            builder.append(request.getRequestURI());
+            String payload;
+            payload = request.getQueryString();
+            if (payload != null) {
+                builder.append('?').append(payload);
+            }
+
+            if (log.isDebugEnabled() && request instanceof CachedHttpServletRequest &&
+                    LOGGABLE_METHODS.contains(request.getMethod())) {
+
+                CachedHttpServletRequest cachedRequest = (CachedHttpServletRequest) request;
+                builder.append(", RequestBody: ").append(cachedRequest.getBody());
+            }
+
+            if (response != null) {
+                builder.append("; ResponseStatus: ").append(response.getStatus());
+                builder.append(", ResponseTime: ").append(System.currentTimeMillis() -
+                        (long) request.getAttribute(REQUEST_START_TIME));
+                builder.append("ms");
+
+                if (log.isDebugEnabled() && response instanceof ContentCachingResponseWrapper) {
+                    builder.append(", ResponseBody: ");
+                    builder.append(new String(((ContentCachingResponseWrapper) response).getContentAsByteArray(),
+                            response.getCharacterEncoding()));
+                }
+            }
+
+            if (log.isDebugEnabled()) {
+                log.debug(builder.toString());
+            } else {
+                log.info(builder.toString());
+            }
+        }
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String correlationId = getUUIDifEmpty(request.getHeader(X_CORRELATION_ID));
         String conversationId = getUUIDifEmpty(request.getHeader(X_CONVERSATION_ID));
+        // Since this is a microservice template I assume that there is a load balancer, to get useful information
+        // from the logs we don't need that the IP of the load balancer gets logged each time, so the load balancer
+        // needs to be configured to forward the client IP on the configured headers "X-Forwarded-For" and
+        // "X-Forwarded-Port" if not present it will log whatever address is available as the caller. Current solutions
+        // like aws load balancer support the forwarding of these headers out of the box
+        String clientAddress = request.getHeader(X_FORWARDED_FOR);
+        String clientPort = request.getHeader(X_FORWARDED_PORT);
+
+        if (StringUtils.isBlank(clientAddress)) {
+            clientAddress = request.getRemoteHost();
+        }
+        if (StringUtils.isBlank(clientPort)) {
+            clientPort = String.valueOf(request.getRemotePort());
+        }
 
         // Save the correlation and conversation IDs to the thread context to be used by the logs each time a log is written
         MDC.put(X_CORRELATION_ID, correlationId);
         MDC.put(X_CONVERSATION_ID, conversationId);
-        MDC.put(CLIENT_ADDRESS, request.getRemoteHost() + ":" + request.getRemotePort());
+        MDC.put(CLIENT_ADDRESS, clientAddress + ":" + clientPort);
 
-        if (logLevelIsInfo) {
-            log.info(REQUEST_BASE_LOG, request.getMethod(), request.getRequestURI());
-        } else if (logLevelIsDebug) {
-            if (request instanceof CachedHttpServletRequest && LOGGABLE_METHODS.contains(request.getMethod())) {
-                CachedHttpServletRequest cachedRequest = (CachedHttpServletRequest) request;
-                String body = cachedRequest.getBody();
-
-                if (StringUtils.isNotBlank(body)) {
-                    // This line sanitises the body string to remove white spaces and line breaks
-                    body = mapper.readValue(cachedRequest.getBody(), JsonNode.class).toString();
-                }
-
-                log.debug(REQUEST_BASE_LOG + ", RequestBody: {}", request.getMethod(), request.getRequestURI(), body);
-            } else {
-                log.info(REQUEST_BASE_LOG, request.getMethod(), request.getRequestURI());
-            }
-        }
+        // Log the request information
+        logRequest(request);
 
         // Save the start time of the request and the correlation and conversation ID in the request context
         request.setAttribute(REQUEST_START_TIME, System.currentTimeMillis());
@@ -78,19 +114,11 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception exception) {
-        String responseTime = String.valueOf(System.currentTimeMillis() - (Long) request.getAttribute(REQUEST_START_TIME));
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception exception) throws Exception {
+        MDC.put(RESPONSE_TIME, String.valueOf(System.currentTimeMillis() - (long) request.getAttribute(REQUEST_START_TIME)));
 
-        MDC.put(RESPONSE_TIME, responseTime);
-
-        if (logLevelIsInfo) {
-            log.info("Finished Method '{}' Path '{}', responseTime: {}ms", request.getMethod(), request.getRequestURI(), responseTime);
-        } else if (logLevelIsDebug) {
-            String responseBody = "";
-
-            log.debug("Finished Method: '{}', Path: '{}', ResponseStatus '{}', ResponseBody: {}, responseTime: {}ms", request.getMethod(),
-                    request.getRequestURI(), response.getStatus(), responseBody, responseTime);
-
-        }
+        logRequest(REQUEST_FINISH_PREFIX_LOG, request, response);
+        response.setHeader(X_CORRELATION_ID, (String) request.getAttribute(X_CORRELATION_ID));
+        response.setHeader(X_CONVERSATION_ID, (String) request.getAttribute(X_CONVERSATION_ID));
     }
 }

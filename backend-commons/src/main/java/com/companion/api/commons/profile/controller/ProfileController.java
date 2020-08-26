@@ -18,7 +18,9 @@ public class ProfileController {
     @PostMapping("/product")
     public ResponseEntity<?> saveProfile(@RequestBody Test test) {
         log.info("Hello {}", test.getUsername());
-        return ResponseEntity.ok("Hello " + test.getUsername());
+        Test response = new Test();
+        response.setUsername("Hello " + test.getUsername() + " This is a test!");
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/product/{id}")
