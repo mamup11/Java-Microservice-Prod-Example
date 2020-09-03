@@ -6,36 +6,56 @@ comments or suggestions will be greatly appreciated.
 
 In this framework you will find ready to use features that are useful and in some cases mandatory for production 
 applications. You will also find examples of how a microservice should be design, how should be tested, some examples 
-of procedures that are needed working in a backend like pull requests, the handling of the different environments 
+of procedures that are needed working in a backend team like pull requests, the handling of the different environments 
 such as local, stage and prod. Some guidance on CI, CD and some other things.
 
 The idea with this project is to help people get more quickly to a production ready product and also to help people that 
 are starting as backend developers or people who intent to start an startup or already have a company to understand how 
 to get value of a good designed backend infrastructure, for some this can be an start to learn of backend 
 and microservices, for others this may be a place to learn one or two things they can improve in their their current 
-systems, for others this may be what they are used to see in a daily basis and for some people maybe this design 
-makes no sense at all. As stated before this is presented as just a guideline and I will be happy to hear any 
-comments or ideas from other people people :) 
+systems, for others this may be what they are used to see in a daily basis so it can be improved by everyone.
 
 # The project
 
 For this example we will be working as an example company called "Companion" with a domain companion.com. This company 
 sells amazing T-Shirts, they have a web page under companion.com where they publish all the T-Shirts that are available 
-for sale and allows customers to buy directly in the webpage. This company has 4 teams, one that works with React in 
-the store page under companion.com known as the store team; the app team handles the mobile application in flutter, 
-another front end team called portal team that works in a administrative web page also in React under admin.companion.com 
-where the staff can add new products (T-Shirts) with its metadata, see KPIs, query sales, etc. And finally we work in 
-the backend team that needs to build and support the backend infrastructure, rest endpoints, data storage and security. 
+for sale and allows customers to buy directly in the webpage. This company have 4 main projects:
 
-Note: This is an oversimplified example that aims to show a good microservice structure, the 2 web pages previously 
-mentioned does not exist and were mentioned only to give context to this example, you will se diagrams and requirements 
-including this non existing pages but those are only there as context, here we will only see Java code and microservices projects.
+- Store - Web app with React - under `companion.com`
+- Company Portal - Web app with React - under `portal.companion.com`
+- Companion App - Native app with Flutter - Available in `iOS` and `android`
+- Backend Services - With Java
+
+Note: This is an oversimplified example that aims to show a good microservice structure, apart from the Backend Services
+the 3 projects previously mentioned does not exist and are described only to give context to this example, 
+you will see diagrams and requirements for these projects ass well to understand the requirements of the Backend Services, 
+in this repo we will only see Java code and microservices projects.
 
 Note: All Companion's products are designed for use with AWS for this example
 
+## Projects
+
 To get a more general idea this is the high level products architecture of the company:
 
-TODO: High level product diagram
+///TODO: High level product diagram
+
+### Store and Mobile App
+
+The Store and the Mobile App are projects client faced and both allow the user to browse products, buy, create an account 
+and look at previous purchases, save their favorites products, publish and buy from a marketplace and have a virtual 
+wallet that can be used to buy more products in the store or the marketplace. And many many more things, it is a 
+big company with a lot of clients.
+
+The requirements that we are gonna see in the backend projects on this repository are:
+
+#### Common Requirements
+
+- Query 
+
+#### Web Page Requirements
+
+#### Mobile App Requirements
+
 
 # Backend
 
