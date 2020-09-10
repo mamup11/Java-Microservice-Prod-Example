@@ -33,36 +33,47 @@ in this repo we will only see Java code and microservices projects.
 
 Note: All Companion's products are designed for use with AWS for this example
 
-## Projects
+## Project Requirements
 
-To get a more general idea this is the high level products architecture of the company:
+To get a more general idea this is the high level project architecture of the company here's is a high level diagram of 
+the projects interactions:
 
-///TODO: High level product diagram
+![companion_projects](assets/companion_projects.png)
+
+Next I will describe some features of each projects along with some requirements, the features are there to give a 
+bigger context of what each project does and how big it is. The requirements are the ones that are implemented in this 
+repository as part of the backend team to show some good practices and procedures.
 
 ### Store and Mobile App
 
-The Store and the Mobile App are projects client faced and both allow the user to browse products, buy, create an account 
-and look at previous purchases, save their favorites products, publish and buy from a marketplace and have a virtual 
-wallet that can be used to buy more products in the store or the marketplace. And many many more things, it is a 
-big company with a lot of clients.
+The Store and the Mobile App are client faced projects and both allow users to browse products, buy products, create an account 
+and look at previous purchases, save their favorites products, gift products to other people, publish and buy from 
+products from a marketplace and have a virtual wallet that can be used to buy more products in the store or the marketplace. 
+And many many more features that will not be listed.
 
-The requirements that we are gonna see in the backend projects on this repository are:
+#### Requirements
 
-#### Common Requirements
+- Login with email and password, social media
+- Register
+- Get featured products
+- Get product details by ID
+- Add credit card
+- Buy products selecting payment method and delivery address
+- Get purchase history
+- Get Store location to show on map
 
-- Query 
+### Company Portal
 
-#### Web Page Requirements
+The company portal is used for many things internally, since adding new products, updating product information, 
+removing listed products, update available products in each storage, see reports and KPIs
 
-#### Mobile App Requirements
-
+#### Requirements
 
 # Backend
 
-This example focus only on the backend side of the project.
-All the exposes services works with Json only
- 
-Pending diagrams of architecture, how many services? which are their names, connections
+All the microservices exposes rest endpoints
+
+![companion_projects](assets/microservices.png)
 
 ## Setup
 
@@ -114,6 +125,8 @@ A having 1 to 2, B having 2 to 4 and C having 1 to 2. This is an example of how 
 improve a system.
 
 /// Correct bellow here
+
+Check seven design principles for security in the cloud -> Enable real-time traceability
 
 we can get logs from other products like a load balancer or a web server but I rather the network logging to be a 
 responsibility of our application, so we only need one place to configure and avoid having to configure extra products 
