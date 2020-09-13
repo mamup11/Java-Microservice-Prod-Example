@@ -11,9 +11,9 @@ such as local, stage and prod. Some guidance on CI, CD and some other things.
 
 The idea with this project is to help people get more quickly to a production ready product and also to help people that 
 are starting as backend developers or people who intent to start an startup or already have a company to understand how 
-to get value of a good designed backend infrastructure, for some this can be an start to learn of backend 
-and microservices, for others this may be a place to learn one or two things they can improve in their their current 
-systems, for others this may be what they are used to see in a daily basis so it can be improved by everyone.
+to get value of a good designed backend infrastructure, for some this may be a place to learn one or two things they can improve in their their current 
+systems, for others this may be what they are used to see in a daily basis and some others won't agree with what I expose here. 
+In order to improve the quality of this framework I am open to hear any comment or suggestions :)
 
 # The project
 
