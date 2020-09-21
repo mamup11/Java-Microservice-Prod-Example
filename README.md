@@ -24,7 +24,7 @@ for sale and allows customers to buy directly in the webpage. This company have 
 - Store - Web app with React - under `companion.com`
 - Company Portal - Web app with React - under `portal.companion.com`
 - Companion App - Native app with Flutter - Available in `iOS` and `android`
-- Backend Services - With Java
+- Backend Services - With Java - under `api.companion.com`
 
 Note: This is an oversimplified example that aims to show a good microservice structure, apart from the Backend Services
 the 3 projects previously mentioned does not exist and are described only to give context to this example, 
