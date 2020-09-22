@@ -45,13 +45,12 @@ public class LoggingMasker {
     }
 
     public String maskJsonMessage(String message) throws JsonProcessingException {
-        if (CollectionUtils.isEmpty(maskedAttributes)) {
-            return message;
-        }
-
         Map<String, Object> map = mapper.readValue(message, new TypeReference<Map<String, Object>>() {
         });
-        findMarkedAttributes(map);
+
+        if (!CollectionUtils.isEmpty(maskedAttributes)) {
+            findMarkedAttributes(map);
+        }
 
         return mapper.writeValueAsString(map);
     }
