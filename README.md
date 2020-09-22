@@ -28,8 +28,8 @@ for sale and allows customers to buy directly in the webpage. This company have 
 
 Note: This is an oversimplified example that aims to show a good microservice structure, apart from the Backend Services
 the 3 projects previously mentioned does not exist and are described only to give context to this example, 
-you will see diagrams and requirements for these projects ass well to understand the requirements of the Backend Services, 
-in this repo we will only see Java code and microservices projects.
+you will see diagrams and requirements for these projects to understand the requirements of the Backend Services, 
+in this repo we will only see Java code and microservices projects only.
 
 Note: All Companion's products are designed for use with AWS for this example
 
@@ -71,7 +71,7 @@ removing listed products, update available products in each storage, see reports
 
 # Backend
 
-All the microservices exposes rest endpoints
+All the microservices exposes rest endpoints and accept json format only
 
 ![companion_projects](assets/microservices.png)
 
