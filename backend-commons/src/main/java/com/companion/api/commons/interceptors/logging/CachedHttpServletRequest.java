@@ -1,7 +1,4 @@
-package com.companion.api.commons.interceptors;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+package com.companion.api.commons.interceptors.logging;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
@@ -38,16 +35,17 @@ public class CachedHttpServletRequest extends HttpServletRequestWrapper {
 
             @Override
             public void setReadListener(ReadListener readListener) {
+                //Method not implemented because is not needed
             }
 
-            public int read() throws IOException {
+            public int read() {
                 return byteArrayInputStream.read();
             }
         };
     }
 
     @Override
-    public BufferedReader getReader() throws IOException {
+    public BufferedReader getReader() {
         return new BufferedReader(new StringReader(cachedBody));
     }
 

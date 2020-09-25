@@ -1,4 +1,4 @@
-package com.companion.api.commons.interceptors;
+package com.companion.api.commons.interceptors.logging;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingResponseWrapper;

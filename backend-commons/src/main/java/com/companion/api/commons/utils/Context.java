@@ -6,16 +6,21 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public class Context {
 
+    private Context() {
+    }
 
     public static Optional<String> getCorrelationId() {
         Optional<HttpServletRequest> httpServletRequestOpt = getCurrentHttpRequest();
 
-        httpServletRequestOpt.ifPresent(httpServletRequest -> {
-            httpServletRequest.getHeader("X-Correlation-Id");
-        });
-        return Optional.empty();
+        Optional<String> correlationId = Optional.empty();
+        if (httpServletRequestOpt.isPresent()) {
+            correlationId = Optional.of(httpServletRequestOpt.get().getHeader("X-Correlation-Id"));
+        }
+
+        return correlationId;
     }
 
     private static Optional<HttpServletRequest> getCurrentHttpRequest() {

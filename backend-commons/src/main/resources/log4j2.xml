@@ -8,7 +8,7 @@
                 <KeyValuePair key="X-Conversation-Id" value="$${ctx:x-conversation-id:-}"/>
                 <KeyValuePair key="clientAddress" value="$${ctx:clientAddress:-}"/>
                 <KeyValuePair key="responseTime(ms)" value="$${ctx:responseTime:-}"/>
-                <KeyValuePair key="application" value="@name@"/>
+                <KeyValuePair key="application" value="$${main:0:-Not Started}"/>
             </JsonLayout>
         </Console>
     </Appenders>

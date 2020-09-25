@@ -207,6 +207,8 @@ and resolve bugs in an efficient manner. Also can help point out possible errors
 sudden increase in an database latency can indicate that the resources of the DB instance may not be enough for 
 the growing traffic.
 
+#### Correlation and Conversation IDs
+
 One of the biggest tool for a production support employee is an ID that can trace logs related to the same process to be
 able to debug and find issues. For this we implemented a Correlation-ID and Conversation-ID, these two ids are added to 
 all the logs in a rest request with the MDC so each time a services generates a log in the same rest request it will have
@@ -315,3 +317,5 @@ SonarQ, Snyk
 ## Circuit breaker
 
 ## Performance
+
+## URL generation

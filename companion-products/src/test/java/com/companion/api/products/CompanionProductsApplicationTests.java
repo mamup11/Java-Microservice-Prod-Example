@@ -1,13 +1,12 @@
 package com.companion.api.products;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.Test;
 
-@SpringBootTest
-class CompanionProductsApplicationTests {
+public class CompanionProductsApplicationTests {
 
     @Test
-    void contextLoads() {
+    public void contextLoads() {
+
     }
 
 }

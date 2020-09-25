@@ -1,8 +1,11 @@
-package com.companion.api.commons.profile.controller;
+package com.companion.api.products.profile.controller;
 
+import com.companion.api.products.profile.controller.resources.ProductDto;
+import com.companion.api.products.profile.model.ProductModel;
+import com.companion.api.products.profile.model.ProductRepository;
 import com.google.common.base.Preconditions;
-import com.companion.api.commons.profile.controller.resources.Test;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,15 +18,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Slf4j
 public class ProfileController {
 
+    @Autowired
+    private ProductRepository productRepository;
+
     @PostMapping("/product")
-    public ResponseEntity<?> saveProfile(@RequestBody Test test) {
-        log.info("Hello {}", test.getUsername());
-        Test response = new Test();
-        response.setUsername("Hello " + test.getUsername() + " This is a test!");
-        response.setId(test.getId());
-        response.setPassword(test.getPassword());
-        response.setInnerTest(test.getInnerTest());
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> saveProfile(@RequestBody ProductDto productDto) {
+        ProductModel product = ProductModel.builder()
+                .name(productDto.getName())
+                .value(productDto.getValue())
+                .build();
+
+        productRepository.save(product);
+        return ResponseEntity.ok(product);
     }
 
     @PutMapping("/product/{id}")
@@ -35,6 +41,6 @@ public class ProfileController {
     @GetMapping("/products")
     public ResponseEntity<?> getProfile() {
         log.info("This is a info message");
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(productRepository.findAll());
     }
 }

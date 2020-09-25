@@ -1,5 +1,6 @@
-package com.companion.api.commons.interceptors;
+package com.companion.api.commons.interceptors.logging;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +10,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,49 +41,58 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
         return value;
     }
 
-    private void logRequest(HttpServletRequest request) throws Exception {
+    private void logRequest(HttpServletRequest request) {
         logRequest(REQUEST_START_PREFIX_LOG, request, null);
     }
 
-    private void logRequest(String prefix, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void logRequest(String prefix, HttpServletRequest request, HttpServletResponse response) {
         if (log.isInfoEnabled()) {
-            StringBuilder builder = new StringBuilder();
-            builder.append(prefix);
-            builder.append(request.getMethod()).append(" ");
-            builder.append(request.getRequestURI());
-            String payload;
-            payload = request.getQueryString();
-            if (payload != null) {
-                builder.append('?').append(payload);
-            }
-
-            // If debug is enabled, its suppose to have a body and the request is a custom readable object then log the request body
-            if (log.isDebugEnabled() && request instanceof CachedHttpServletRequest &&
-                    LOGGABLE_METHODS.contains(request.getMethod())) {
-
-                CachedHttpServletRequest cachedRequest = (CachedHttpServletRequest) request;
-                builder.append(", RequestBody: ").append(loggingMasker.maskJsonMessage(cachedRequest.getBody()));
-            }
-
-            if (response != null) {
-                builder.append("; ResponseStatus: ").append(response.getStatus());
-                builder.append(", ResponseTime: ").append(System.currentTimeMillis() -
-                        (long) request.getAttribute(REQUEST_START_TIME));
-                builder.append("ms");
-
-                if (log.isDebugEnabled() && response instanceof ContentCachingResponseWrapper) {
-                    String responseBody = new String(((ContentCachingResponseWrapper) response).getContentAsByteArray(),
-                            response.getCharacterEncoding());
-
-                    builder.append(", ResponseBody: ").append(loggingMasker.maskJsonMessage(responseBody));
+            try {
+                StringBuilder builder = new StringBuilder();
+                builder.append(prefix);
+                builder.append(request.getMethod()).append(" ");
+                builder.append(request.getRequestURI());
+                String payload;
+                payload = request.getQueryString();
+                if (payload != null) {
+                    builder.append('?').append(payload);
                 }
-            }
 
-            if (log.isDebugEnabled()) {
-                log.debug(builder.toString());
-            } else {
-                log.info(builder.toString());
+                // If debug is enabled, its suppose to have a body and the request is a custom readable object then log the request body
+                if (log.isDebugEnabled() && request instanceof CachedHttpServletRequest &&
+                        LOGGABLE_METHODS.contains(request.getMethod())) {
+
+                    CachedHttpServletRequest cachedRequest = (CachedHttpServletRequest) request;
+                    builder.append(", RequestBody: ").append(loggingMasker.maskJsonMessage(cachedRequest.getBody()));
+                }
+
+                if (response != null) {
+                    addResponseToMessage(builder, request, response);
+                }
+
+                if (log.isDebugEnabled()) {
+                    log.debug(builder.toString());
+                } else {
+                    log.info(builder.toString());
+                }
+            } catch (JsonProcessingException | UnsupportedEncodingException ex) {
+                log.error("Error creating request log", ex);
             }
+        }
+    }
+
+    private void addResponseToMessage(StringBuilder builder, HttpServletRequest request, HttpServletResponse response)
+            throws UnsupportedEncodingException, JsonProcessingException {
+        builder.append("; ResponseStatus: ").append(response.getStatus());
+        builder.append(", ResponseTime: ").append(System.currentTimeMillis() -
+                (long) request.getAttribute(REQUEST_START_TIME));
+        builder.append("ms");
+
+        if (log.isDebugEnabled() && response instanceof ContentCachingResponseWrapper) {
+            String responseBody = new String(((ContentCachingResponseWrapper) response).getContentAsByteArray(),
+                    response.getCharacterEncoding());
+
+            builder.append(", ResponseBody: ").append(loggingMasker.maskJsonMessage(responseBody));
         }
     }
 
@@ -121,7 +132,7 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception exception) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception exception) {
         MDC.put(RESPONSE_TIME, String.valueOf(System.currentTimeMillis() - (long) request.getAttribute(REQUEST_START_TIME)));
 
         logRequest(REQUEST_FINISH_PREFIX_LOG, request, response);
