@@ -15,6 +15,34 @@ to get value of a good designed backend infrastructure, for some this may be a p
 systems, for others this may be what they are used to see in a daily basis and some others won't agree with what I expose here. 
 In order to improve the quality of this framework I am open to hear any comment or suggestions :)
 
+# Table of Contents
+1. [The project](#The project)
+    1. [Project Requirements](#Project Requirements)
+        1. [Store and Mobile App](#Store and Mobile App)
+            1. [Store and Mobile App Requirements](#Store and Mobile App Requirements)
+        2. [Company Portal](#Company Portal)
+            1. [Company Portal Requirements](#Company Portal Requirements)
+2. [Backend](#Backend)
+    1. [Setup](#Setup)
+    2. [Logging](#Logging)
+        1. [Logs analysis example](#Logs analysis example)
+        2. [Logging Framework](#Logging Framework)
+            1. [Markers and MDC](#Markers and MDC)
+            2. [Json Layout](#Json Layout)
+        3. [Network logging](#Network logging)
+        4. [Support process](#Support process)
+            1. [Correlation and Conversation IDs](#Correlation and Conversation IDs)
+    3. [Interceptors](#Interceptors)
+    4. [Database](#Database)
+    5. [Rest endpoints](#Rest endpoints)
+    6. [Calls to other Systems](#Calls to other Systems)
+    7. [Tests and coverage](#Tests and coverage)
+    8. [Pul Requests (PR), approvals and rejections](#pul-requests-pr-approvals-and-rejections)
+    9. [CI - CD](#ci---cd)
+    10. [Circuit breaker](#Circuit breaker)
+    11. [Performance](#Performance)
+    12. [URL generation](#URL generation)
+
 # The project
 
 For this example we will be working as an example company called "Companion" with a domain companion.com. This company 
@@ -51,7 +79,7 @@ and look at previous purchases, save their favorites products, gift products to 
 products from a marketplace and have a virtual wallet that can be used to buy more products in the store or the marketplace. 
 And many many more features that will not be listed.
 
-#### Requirements
+#### Store and Mobile App Requirements
 
 - Login with email and password, social media
 - Register
@@ -67,7 +95,7 @@ And many many more features that will not be listed.
 The company portal is used for many things internally, since adding new products, updating product information, 
 removing listed products, update available products in each storage, see reports and KPIs
 
-#### Requirements
+#### Company Portal Requirements
 
 - Login with email and password
 - Register new people with roles (Admins and TI management)
@@ -76,9 +104,6 @@ removing listed products, update available products in each storage, see reports
 - Get products (All no clients)
 - Mark a product as featured (Admins and Publishers)
 - Query sales of the current month (Admins and Finance)
-
-
-#### Requirements
 
 # Backend
 
