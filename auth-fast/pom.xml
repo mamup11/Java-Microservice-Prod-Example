@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>auth-fast</artifactId>
+    <version>0.0.1</version>
+    <name>auth-fast</name>
+    <description>Authorization Service</description>
+
+    <parent>
+        <groupId>com.companion.api</groupId>
+        <artifactId>companion-backend</artifactId>
+        <version>1</version>
+    </parent>
+
+    <dependencies>
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>  <!-- We don't want the default logging, we want log4j in async mode! -->
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- // Spring -->
+
+        <!-- Misc -->
+        <!-- Lombok: Easy generation of boilerplate code automatically (If using an IDE a plugin may be necessary) -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!-- Google Guava: Provides useful tools like Preconditions -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.2-jre</version>
+        </dependency>
+        <!-- Apache commons: Provides useful utils like StringUtils, ExceptionUtils and others -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <!-- // Misc -->
+
+        <!-- Testing -->
+        <!-- RestAssured: To easily make calls to our endpoints in Functional Test (Or integration tests)
+        and do assertions with the responses -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>3.3.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Mockito: To handle unitary tests -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.18</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Springboot Test: Allows us to test against a running instance -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>  <!-- We don't want the default logging, we want log4j in async mode! -->
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- // Testing -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
