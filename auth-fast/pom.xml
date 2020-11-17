@@ -5,7 +5,7 @@
     <artifactId>auth-fast</artifactId>
     <version>0.0.1</version>
     <name>auth-fast</name>
-    <description>Authorization Service</description>
+    <description>Authorization and Authentication Service</description>
 
     <parent>
         <groupId>com.companion.api</groupId>

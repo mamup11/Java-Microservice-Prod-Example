@@ -20,7 +20,7 @@ public class TokenController {
     }
 
     @PostMapping("/validate")
-    public ResponseEntity<Void> validate(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<Void> validate(@RequestHeader(value = "Authorization", required = false) String token) {
         tokenApi.validateToken(token);
         return ResponseEntity.ok().build();
     }

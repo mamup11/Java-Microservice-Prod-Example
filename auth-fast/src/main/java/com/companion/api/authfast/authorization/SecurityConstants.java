@@ -5,5 +5,5 @@ public class SecurityConstants {
     private SecurityConstants() {
     }
 
-    public static final String TOKEN_PREFIX = "BEARER ";
+    public static final String TOKEN_PREFIX = "Bearer ";
 }

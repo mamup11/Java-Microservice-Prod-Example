@@ -35,8 +35,7 @@ public class TokenApi {
         }
 
         try {
-            jwtVerifier.verify(token.replace(TOKEN_PREFIX, ""))
-                    .getClaims();
+            jwtVerifier.verify(token.replace(TOKEN_PREFIX, ""));
         } catch (JWTVerificationException e) {
             log.debug("Token validation failed for token: {}", token, e);
             throwGeneralUnauthorizedException();
