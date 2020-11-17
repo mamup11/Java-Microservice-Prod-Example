@@ -14,7 +14,8 @@ public class LoggingInterceptorConfig implements WebMvcConfigurer {
 
     private final LoggingMasker loggingMasker;
 
-    public LoggingInterceptorConfig(@Value("${application.name}") String applicationName, LoggingMasker loggingMasker) {
+    public LoggingInterceptorConfig(@Value("${application.name:}") String applicationName,
+                                    LoggingMasker loggingMasker) {
         MainMapLookup.setMainArguments(applicationName);
         this.loggingMasker = loggingMasker;
     }
