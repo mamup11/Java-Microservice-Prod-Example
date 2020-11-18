@@ -84,6 +84,10 @@ And many many more features that will not be listed.
 - Login with email and password, social media
 - Register
 - Get featured products
+- Add a favorite products
+- Pay a subscription for exclusive products
+- Get exclusive products
+- Get favorite products
 - Get product details by ID
 - Add credit card
 - Buy products selecting payment method and delivery address

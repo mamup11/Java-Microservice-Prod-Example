@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>products</artifactId>
     <version>0.0.1</version>
-    <name>products</name>
+    <name>companion-products</name>
     <description>Products microservice for companion company</description>
 
     <parent>
@@ -19,6 +19,7 @@
 
     <dependencies>
         <!-- Spring -->
+        <!-- Spring boot starter web for rest endpoints -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -26,6 +27,17 @@
                 <exclusion>  <!-- We don't want the default logging, we want log4j in async mode! -->
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Spring boot starter jpa DB crud interface -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <exclusions>
+                <exclusion>  <!-- We don't want the default logging, we want log4j in async mode! -->
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

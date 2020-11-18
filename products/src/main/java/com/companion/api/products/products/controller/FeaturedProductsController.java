@@ -10,49 +10,38 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/products")
-public class ProductsController {
+@RequestMapping("/product/featured")
+public class FeaturedProductsController {
 
     private final ProductsApi productsApi;
     private final ProductConverter productConverter;
 
     @Autowired
-    public ProductsController(ProductsApi productsApi, ProductConverter productConverter) {
+    public FeaturedProductsController(ProductsApi productsApi, ProductConverter productConverter) {
         this.productsApi = productsApi;
         this.productConverter = productConverter;
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getProducts() {
-        List<ProductDto> productDtos = productsApi.getAllProducts()
+    public ResponseEntity<List<ProductDto>> getFeaturedProducts() {
+        List<ProductDto> productDtos = productsApi.getFeaturedProducts()
                 .stream()
                 .map(productConverter::convert)
                 .collect(Collectors.toList());
-
         return ResponseEntity.ok(productDtos);
     }
 
-    @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
-        Preconditions.checkArgument(productDto != null, " Product information must be provided");
+    @PostMapping("/mark/{id}")
+    public ResponseEntity<Void> markFeaturedProduct(@PathVariable("id") Long productId) {
+        Preconditions.checkArgument(productId != null, " Product id must not be null");
 
-        ProductDto newProductDto = productConverter.convert(productsApi.createProduct(productDto));
-        return ResponseEntity.ok(newProductDto);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
-        Preconditions.checkArgument(productId != null, "The product id must not be null");
-
-        ProductDto newProductDto = productConverter.convert(productsApi.getById(productId));
-        return ResponseEntity.ok(newProductDto);
+        productsApi.markFeaturedProduct(productId);
+        return ResponseEntity.ok().build();
     }
 }

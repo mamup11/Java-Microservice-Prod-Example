@@ -1,4 +1,4 @@
-package com.companion.api.authfast.authentication.controller.model;
+package com.companion.api.authfast.authentication.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
