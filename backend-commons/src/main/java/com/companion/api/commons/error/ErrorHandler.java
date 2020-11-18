@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -25,20 +26,20 @@ public class ErrorHandler {
 
         ApiError.ApiErrorBuilder apiErrorBuilder = ApiError.builder()
                 .timestamp(Instant.now())
-                .message(ExceptionUtils.getMessage(ex))
+                .message(ex.getMessage())
                 .stackTrace(stackTraceEnabled ? ExceptionUtils.getStackTrace(ex) : null);
 
         HttpStatus responseStatus;
-        if (ex instanceof IllegalArgumentException) {
-            responseStatus = HttpStatus.BAD_REQUEST;
-        } else if (ex instanceof NotFoundException) {
-            responseStatus = HttpStatus.BAD_REQUEST;
-        } else if (ex instanceof IllegalStateException) {
+        if (ex instanceof IllegalArgumentException
+                || ex instanceof NotFoundException
+                || ex instanceof IllegalStateException) {
             responseStatus = HttpStatus.BAD_REQUEST;
         } else if (ex instanceof ForbiddenAccessException) {
             responseStatus = HttpStatus.FORBIDDEN;
         } else if (ex instanceof UnauthorizedException) {
             responseStatus = HttpStatus.UNAUTHORIZED;
+        } else if (ex instanceof HttpRequestMethodNotSupportedException) {
+            responseStatus = HttpStatus.METHOD_NOT_ALLOWED;
         } else {
             responseStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }

@@ -48,7 +48,7 @@ public class ProductsController {
         return ResponseEntity.ok(newProductDto);
     }
 
-    @PutMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
         Preconditions.checkArgument(productId != null, "The product id must not be null");
 
