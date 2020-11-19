@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/products/featured")
+@RequestMapping("/featured")
 public class FeaturedProductsController {
 
     private final ProductsApi productsApi;

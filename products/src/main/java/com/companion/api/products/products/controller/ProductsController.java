@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/products")
+@RequestMapping("/product")
 public class ProductsController {
 
     private final ProductsApi productsApi;
@@ -32,12 +31,12 @@ public class ProductsController {
 
     @GetMapping
     public ResponseEntity<List<ProductDto>> getProducts() {
-        List<ProductDto> productDtos = productsApi.getAllProducts()
+        List<ProductDto> productDtoList = productsApi.getAllProducts()
                 .stream()
                 .map(productConverter::convert)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(productDtos);
+        return ResponseEntity.ok(productDtoList);
     }
 
     @PostMapping
