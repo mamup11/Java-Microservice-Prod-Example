@@ -84,7 +84,7 @@ public class ProductsApplication {
                             .build(),
                     FavoriteProductsModel.builder()
                             .id(FavoriteProductsModel.FavoriteProductsModelKey.builder()
-                                    .productId(5L)
+                                    .productId(4L)
                                     .userId("USER3")
                                     .build())
                             .build()

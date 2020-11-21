@@ -25,6 +25,7 @@ public class ProductsApi {
                 .description(productDto.getDescription())
                 .value(productDto.getValue())
                 .imageUrl(productDto.getImageUrl())
+                .featured(ProductModel.Featured.NOT_FEATURED)
                 .build();
 
         return productRepository.save(model);

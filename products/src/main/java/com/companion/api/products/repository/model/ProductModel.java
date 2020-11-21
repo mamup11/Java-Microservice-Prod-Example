@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,6 +30,7 @@ public class ProductModel {
     private String description;
     private long value;
     private String imageUrl;
+    @Enumerated(EnumType.STRING)
     private Featured featured;
 
     public enum Featured {
