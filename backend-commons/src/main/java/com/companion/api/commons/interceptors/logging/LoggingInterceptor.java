@@ -62,8 +62,10 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
                 if (log.isDebugEnabled() && request instanceof CachedHttpServletRequest &&
                         LOGGABLE_METHODS.contains(request.getMethod())) {
 
-                    CachedHttpServletRequest cachedRequest = (CachedHttpServletRequest) request;
-                    builder.append(", RequestBody: ").append(loggingMasker.maskJsonMessage(cachedRequest.getBody()));
+                    String cachedRequest = ((CachedHttpServletRequest) request).getBody();
+                    if (StringUtils.isNotBlank(cachedRequest)) {
+                        builder.append(", RequestBody: ").append(loggingMasker.maskJsonMessage(cachedRequest));
+                    }
                 }
 
                 if (response != null) {
@@ -92,7 +94,9 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
             String responseBody = new String(((ContentCachingResponseWrapper) response).getContentAsByteArray(),
                     response.getCharacterEncoding());
 
-            builder.append(", ResponseBody: ").append(loggingMasker.maskJsonMessage(responseBody));
+            if (StringUtils.isNotBlank(responseBody)) {
+                builder.append(", ResponseBody: ").append(loggingMasker.maskJsonMessage(responseBody));
+            }
         }
     }
 

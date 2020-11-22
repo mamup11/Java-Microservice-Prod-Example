@@ -3,6 +3,7 @@ package com.companion.api.commons.interceptors.logging;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +44,7 @@ public class LoggingMasker {
     }
 
     public String maskJsonMessage(String message) throws JsonProcessingException {
+        Preconditions.checkArgument(StringUtils.isNotBlank(message), "A valid string should be provided");
         Map<String, Object> map = mapper.readValue(message, new TypeReference<Map<String, Object>>() {
         });
 

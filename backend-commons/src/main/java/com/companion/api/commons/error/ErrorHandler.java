@@ -1,7 +1,9 @@
 package com.companion.api.commons.error;
 
 import com.companion.api.commons.error.model.ApiError;
+import com.companion.api.commons.error.model.exceptions.ExceptionWithCode;
 import com.companion.api.commons.error.model.exceptions.ForbiddenAccessException;
+import com.companion.api.commons.error.model.exceptions.IllegalArgumentWithCodeException;
 import com.companion.api.commons.error.model.exceptions.NotFoundException;
 import com.companion.api.commons.error.model.exceptions.UnauthorizedException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -30,7 +32,10 @@ public class ErrorHandler {
                 .stackTrace(stackTraceEnabled ? ExceptionUtils.getStackTrace(ex) : null);
 
         HttpStatus responseStatus;
-        if (ex instanceof IllegalArgumentException
+        if(ex instanceof IllegalArgumentWithCodeException) {
+            responseStatus = HttpStatus.BAD_REQUEST;
+            apiErrorBuilder.errorCode(((ExceptionWithCode) ex).getErrorCode());
+        } else if (ex instanceof IllegalArgumentException
                 || ex instanceof NotFoundException
                 || ex instanceof IllegalStateException) {
             responseStatus = HttpStatus.BAD_REQUEST;

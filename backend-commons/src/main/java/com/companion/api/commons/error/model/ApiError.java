@@ -23,5 +23,6 @@ public class ApiError {
     private Instant timestamp;
     private int status;
     private String message;
+    private String errorCode;
     private String stackTrace;
 }

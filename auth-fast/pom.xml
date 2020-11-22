@@ -36,13 +36,25 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Spring Security Crypto for Hashing algorithms -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
         <!-- // Spring -->
 
         <!-- Security -->
+        <!-- Auth0 JWT library to easily work with JWTs -->
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
             <version>3.8.2</version>
+        </dependency>
+        <!-- BouncyCastle Required by Argon2PasswordEncoder (Spring Security Hashing Algorithm) -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>1.67</version>
         </dependency>
 
         <!-- Database -->
