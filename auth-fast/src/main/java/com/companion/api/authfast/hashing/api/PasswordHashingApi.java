@@ -1,4 +1,4 @@
-package com.companion.api.authfast.registration.api;
+package com.companion.api.authfast.hashing.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
@@ -21,7 +21,6 @@ public class PasswordHashingApi {
         String hash = ARGON_2_PASSWORD_ENCODER.encode(password);
 
         if (log.isDebugEnabled()) {
-            log.debug("Generated Hash: {}", hash);
             log.debug("Hashing took {} ms", ChronoUnit.MILLIS.between(start, Instant.now()));
         }
 

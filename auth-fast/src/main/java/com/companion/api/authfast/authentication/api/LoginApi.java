@@ -3,7 +3,9 @@ package com.companion.api.authfast.authentication.api;
 import com.auth0.jwt.JWT;
 import com.companion.api.authfast.authentication.model.TokenResponseModel;
 import com.companion.api.commons.error.model.exceptions.UnauthorizedException;
+import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,11 +40,9 @@ public class LoginApi {
      * @return
      */
     public TokenResponseModel login(String username, String password) {
-        if (MOCK_USERNAME.equals(username) && MOCK_PASSWORD.equals(password)) {
-            return TokenResponseModel.builder()
-                    .accessToken(generateToken())
-                    .build();
-        }
+        Preconditions.checkArgument(StringUtils.isNotBlank(username), "Username must be provided");
+        Preconditions.checkArgument(StringUtils.isNotBlank(password), "Password must be provided");
+
         throw new UnauthorizedException("Unauthorized");
     }
 

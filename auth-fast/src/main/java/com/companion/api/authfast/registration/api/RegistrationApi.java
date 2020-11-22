@@ -1,5 +1,6 @@
 package com.companion.api.authfast.registration.api;
 
+import com.companion.api.authfast.hashing.api.PasswordHashingApi;
 import com.companion.api.authfast.registration.controller.dto.RegistrationDto;
 import com.companion.api.authfast.repository.UserModelRepository;
 import com.companion.api.authfast.repository.model.UserModel;
