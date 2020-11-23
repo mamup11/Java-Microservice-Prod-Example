@@ -39,6 +39,19 @@
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
 
+        <!-- Retrofit2 -->
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>retrofit</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-jackson</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <!-- // Retrofit2 -->
+
         <!-- Misc -->
         <!-- Lombok: Easy generation of boilerplate code automatically (If using an IDE a plugin may be necessary) -->
         <dependency>

@@ -9,11 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.companion.api")
-public class AuthFastApplication {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(AuthFastApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
     @Bean

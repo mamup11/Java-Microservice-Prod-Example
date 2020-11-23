@@ -14,15 +14,16 @@ import java.io.UnsupportedEncodingException;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.companion.api.commons.utils.Context.CLIENT_ADDRESS;
+import static com.companion.api.commons.utils.Context.REQUEST_START_TIME;
+import static com.companion.api.commons.utils.Context.RESPONSE_TIME;
+import static com.companion.api.commons.utils.Context.X_CONVERSATION_ID;
+import static com.companion.api.commons.utils.Context.X_CORRELATION_ID;
+import static com.companion.api.commons.utils.Context.X_FORWARDED_FOR;
+import static com.companion.api.commons.utils.Context.X_FORWARDED_PORT;
+
 @Slf4j
 public class LoggingInterceptor extends HandlerInterceptorAdapter {
-    private static final String X_CORRELATION_ID = "x-correlation-id";
-    private static final String X_CONVERSATION_ID = "x-conversation-id";
-    private static final String X_FORWARDED_FOR = "X-Forwarded-For";
-    private static final String X_FORWARDED_PORT = "X-Forwarded-Port";
-    private static final String REQUEST_START_TIME = "requestStartTime";
-    private static final String CLIENT_ADDRESS = "clientAddress";
-    private static final String RESPONSE_TIME = "responseTime";
     private static final String REQUEST_START_PREFIX_LOG = "Starting Request ";
     private static final String REQUEST_FINISH_PREFIX_LOG = "Finished Request ";
 
@@ -58,15 +59,8 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
                     builder.append('?').append(payload);
                 }
 
-                // If debug is enabled, its suppose to have a body and the request is a custom readable object then log the request body
-                if (log.isDebugEnabled() && request instanceof CachedHttpServletRequest &&
-                        LOGGABLE_METHODS.contains(request.getMethod())) {
-
-                    String cachedRequest = ((CachedHttpServletRequest) request).getBody();
-                    if (StringUtils.isNotBlank(cachedRequest)) {
-                        builder.append(", RequestBody: ").append(loggingMasker.maskJsonMessage(cachedRequest));
-                    }
-                }
+                // Log Request information
+                addRequestToMessage(builder, request);
 
                 if (response != null) {
                     addResponseToMessage(builder, request, response);
@@ -83,6 +77,17 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
         }
     }
 
+    private void addRequestToMessage(StringBuilder builder, HttpServletRequest request) throws JsonProcessingException {
+        // If debug is enabled, its suppose to have a body and the request is a custom readable object then log the request body
+        if (log.isDebugEnabled() && request instanceof CachedHttpServletRequest &&
+                LOGGABLE_METHODS.contains(request.getMethod())) {
+
+            String cachedRequest = ((CachedHttpServletRequest) request).getBody();
+            if (StringUtils.isNotBlank(cachedRequest)) {
+                builder.append(", RequestBody: ").append(loggingMasker.maskJsonMessage(cachedRequest));
+            }
+        }
+    }
     private void addResponseToMessage(StringBuilder builder, HttpServletRequest request, HttpServletResponse response)
             throws UnsupportedEncodingException, JsonProcessingException {
         builder.append("; ResponseStatus: ").append(response.getStatus());

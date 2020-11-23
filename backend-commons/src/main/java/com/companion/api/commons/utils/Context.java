@@ -8,19 +8,39 @@ import java.util.Optional;
 
 @SuppressWarnings("unused")
 public class Context {
+    public static final String AUTHORIZATION = "Authorization";
+    public static final String X_CORRELATION_ID = "x-correlation-id";
+    public static final String X_CONVERSATION_ID = "x-conversation-id";
+    public static final String X_FORWARDED_FOR = "X-Forwarded-For";
+    public static final String X_FORWARDED_PORT = "X-Forwarded-Port";
+    public static final String REQUEST_START_TIME = "requestStartTime";
+    public static final String CLIENT_ADDRESS = "clientAddress";
+    public static final String RESPONSE_TIME = "responseTime";
 
     private Context() {
     }
 
     public static Optional<String> getCorrelationId() {
+        return getAttributeFromRequest(X_CORRELATION_ID);
+    }
+
+    public static Optional<String> getConversationId() {
+        return getAttributeFromRequest(X_CONVERSATION_ID);
+    }
+
+    public static Optional<String> getAuthorization() {
+        return getAttributeFromRequest(AUTHORIZATION);
+    }
+
+    public static Optional<String> getAttributeFromRequest(String attributeName) {
         Optional<HttpServletRequest> httpServletRequestOpt = getCurrentHttpRequest();
 
-        Optional<String> correlationId = Optional.empty();
+        Optional<String> attribute = Optional.empty();
         if (httpServletRequestOpt.isPresent()) {
-            correlationId = Optional.of(httpServletRequestOpt.get().getHeader("X-Correlation-Id"));
+            attribute = Optional.ofNullable((String) httpServletRequestOpt.get().getAttribute(attributeName));
         }
 
-        return correlationId;
+        return attribute;
     }
 
     private static Optional<HttpServletRequest> getCurrentHttpRequest() {

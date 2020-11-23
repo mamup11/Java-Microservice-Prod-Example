@@ -2,6 +2,7 @@ package com.companion.api.products.repository.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class FavoriteProductsModel {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @EqualsAndHashCode
     @Embeddable
     public static class FavoriteProductsModelKey implements Serializable {
         private String userId;
