@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,9 +23,12 @@ import java.util.stream.Collectors;
 public class LoggingMasker {
     private static final String ERROR_MESSAGE = "Error parsing masker.attributesToMask property. " +
             "This property should be coma separated strings or empty to skip masking";
+    private static final Set<String> DEFAULT_MASKED_ATTRIBUTES = Sets.newHashSet("pass",
+            "password","user","username","name","lastName","email","mail","cardNumber","cvv","expDate", "accessToken",
+            "token");
+
     private final ObjectMapper mapper;
     private final Set<String> maskedAttributes;
-
     public LoggingMasker(@Value(value = "${masker.attributesToMask:}") String comaSeparatedAttributes,
                          ObjectMapper objectMapper) {
         this.mapper = objectMapper;
@@ -35,7 +39,9 @@ public class LoggingMasker {
                         .map(String::toUpperCase)
                         .collect(Collectors.toSet());
             } else {
-                maskedAttributes = null;
+                maskedAttributes = DEFAULT_MASKED_ATTRIBUTES.stream()
+                        .map(String::toUpperCase)
+                        .collect(Collectors.toSet());
             }
         } catch (Exception e) {
             log.error(ERROR_MESSAGE, e);

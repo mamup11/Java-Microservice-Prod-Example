@@ -25,6 +25,7 @@ user -> Auth-Fast -> Commons-People
 ## Authentication
 
 - user / pass 
+- Roles
 - Login attempts
 - Tokens and refresh tokens
 - Inactive/banned tokens

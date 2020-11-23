@@ -4,23 +4,31 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.companion.api.commons.error.model.exceptions.UnauthorizedException;
+import com.companion.api.authfast.authorization.util.SecurityConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import static com.companion.api.authfast.authorization.SecurityConstants.TOKEN_PREFIX;
+import java.util.Date;
+
+import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+import static com.companion.api.authfast.authorization.util.SecurityConstants.TOKEN_PREFIX;
 
 @Slf4j
 @Component
 public class TokenApi {
 
+    private final long ttl;
     private final JWTVerifier jwtVerifier;
+    private final Algorithm signingAlgorithm;
 
     @Autowired
-    public TokenApi(@Value("${authorization.jwt.hash.secret}") String secret) {
-        this.jwtVerifier = JWT.require(Algorithm.HMAC512(secret.getBytes()))
+    public TokenApi(@Value("${authorization.jwt.hash.secret}") String secret,
+                    @Value("${authorization.jwt.ttl}") long ttl) {
+        this.ttl = ttl;
+        this.signingAlgorithm = HMAC512(secret.getBytes());
+        this.jwtVerifier = JWT.require(signingAlgorithm)
                 .build();
     }
 
@@ -31,21 +39,27 @@ public class TokenApi {
      */
     public void validateToken(String token) {
         if (token == null || !token.startsWith(TOKEN_PREFIX)) {
-            throwGeneralUnauthorizedException();
+            SecurityConstants.throwGeneralUnauthorizedException();
         }
 
         try {
             jwtVerifier.verify(token.replace(TOKEN_PREFIX, ""));
         } catch (JWTVerificationException e) {
             log.debug("Token validation failed for token: {}", token, e);
-            throwGeneralUnauthorizedException();
+            SecurityConstants.throwGeneralUnauthorizedException();
         }
     }
 
     /**
-     * This method throws a general Unauthorized Exception with general message
+     * This method generates a token with expiration of 2 hours.
+     *
+     * @return A valid token with 2 hours to expire
      */
-    private void throwGeneralUnauthorizedException() {
-        throw new UnauthorizedException("Unauthorized");
+    public String generateToken(String userID) {
+        return JWT.create()
+                .withClaim("userId", userID)
+                // TODO: add roles
+                .withExpiresAt(new Date(System.currentTimeMillis() + ttl))
+                .sign(signingAlgorithm);
     }
 }

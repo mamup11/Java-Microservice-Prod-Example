@@ -1,6 +1,6 @@
 package com.companion.api.authfast.registration.api;
 
-import com.companion.api.authfast.hashing.api.PasswordHashingApi;
+import com.companion.api.authfast.hashing.PasswordHashingApi;
 import com.companion.api.authfast.registration.controller.dto.RegistrationDto;
 import com.companion.api.authfast.repository.UserModelRepository;
 import com.companion.api.authfast.repository.model.UserModel;
@@ -39,12 +39,11 @@ public class RegistrationApi {
         saveNewUser(userModel);
     }
 
-
-    public void saveNewUser(UserModel userModel) {
+    private void saveNewUser(UserModel userModel) {
         try {
             userModelRepository.save(userModel);
         } catch (DataIntegrityViolationException dive) {
-            if (StringUtils.isNotBlank(dive.getMessage()) && dive.getMessage().contains("USERNAME_UNIQUE_CONSTRAINT")) {
+            if (StringUtils.isNotBlank(dive.getMessage()) && "USERNAME_UNIQUE_CONSTRAINT".contains(dive.getMessage())) {
                 throw new IllegalArgumentWithCodeException("Username already taken", "USERNAME_TAKEN");
             }
 

@@ -1,4 +1,4 @@
-package com.companion.api.authfast.authentication.model;
+package com.companion.api.authfast.authentication.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,9 +8,9 @@ import lombok.Setter;
 
 @Setter
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class TokenResponseModel {
+public class LoginResponseDto {
     private String accessToken;
 }

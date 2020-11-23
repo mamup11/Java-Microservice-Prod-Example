@@ -2,7 +2,7 @@ package com.companion.api.authfast.authentication.controller;
 
 import com.companion.api.authfast.authentication.api.LoginApi;
 import com.companion.api.authfast.authentication.controller.dto.LoginDto;
-import com.companion.api.authfast.authentication.model.TokenResponseModel;
+import com.companion.api.authfast.authentication.controller.dto.LoginResponseDto;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseModel> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginDto loginDto) {
         Preconditions.checkArgument(loginDto != null, "Login information must be present");
         return ResponseEntity.ok(loginApi.login(loginDto.getUsername(), loginDto.getPassword()));
     }

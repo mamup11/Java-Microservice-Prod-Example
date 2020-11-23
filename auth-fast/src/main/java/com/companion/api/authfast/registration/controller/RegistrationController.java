@@ -1,6 +1,5 @@
 package com.companion.api.authfast.registration.controller;
 
-import com.companion.api.authfast.authentication.model.TokenResponseModel;
 import com.companion.api.authfast.registration.api.RegistrationApi;
 import com.companion.api.authfast.registration.controller.dto.RegistrationDto;
 import com.google.common.base.Preconditions;
