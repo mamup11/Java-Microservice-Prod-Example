@@ -1,7 +1,9 @@
-package com.companion.api.commons.interceptors.logging;
+package com.companion.api.commons.interceptors;
 
 import com.companion.api.commons.external.authfast.AuthFastService;
 import com.companion.api.commons.interceptors.authentication.AuthInterceptor;
+import com.companion.api.commons.interceptors.logging.LoggingInterceptor;
+import com.companion.api.commons.interceptors.logging.LoggingMasker;
 import org.apache.logging.log4j.core.lookup.MainMapLookup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +15,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * This class configures adds the logging interceptor to the registry so all request are automatically logged
  */
 @Configuration
-public class LoggingInterceptorConfig implements WebMvcConfigurer {
+public class InterceptorsConfig implements WebMvcConfigurer {
 
     private final LoggingMasker loggingMasker;
     private final AuthFastService authFastService;
 
-    public LoggingInterceptorConfig(@Value("${application.name:}") String applicationName,
-                                    AuthFastService authFastService,
-                                    LoggingMasker loggingMasker) {
+    public InterceptorsConfig(@Value("${application.name:}") String applicationName,
+                              AuthFastService authFastService,
+                              LoggingMasker loggingMasker) {
         MainMapLookup.setMainArguments(applicationName);
         this.loggingMasker = loggingMasker;
         this.authFastService = authFastService;

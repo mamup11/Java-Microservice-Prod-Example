@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+//This is done to discover and use only the error handler. We do not want to autoconfigure the interceptors
+@ComponentScan(basePackages = {"com.companion.api.authfast", "com.companion.api.commons.error"})
 public class Application {
 
     public static void main(String[] args) {

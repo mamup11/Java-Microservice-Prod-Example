@@ -6,6 +6,7 @@ import com.companion.api.commons.error.model.exceptions.ForbiddenAccessException
 import com.companion.api.commons.error.model.exceptions.IllegalArgumentWithCodeException;
 import com.companion.api.commons.error.model.exceptions.NotFoundException;
 import com.companion.api.commons.error.model.exceptions.UnauthorizedException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.time.Instant;
 
 @ControllerAdvice
+@Slf4j
 public class ErrorHandler {
 
     @Value("${api.enableStack-trace:false}")
@@ -46,6 +48,7 @@ public class ErrorHandler {
         } else if (ex instanceof HttpRequestMethodNotSupportedException) {
             responseStatus = HttpStatus.METHOD_NOT_ALLOWED;
         } else {
+            log.error("Application responded with 500 error", ex);
             responseStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 

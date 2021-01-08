@@ -3,6 +3,7 @@ package com.companion.api.authfast;
 import com.companion.api.commons.interceptors.logging.LoggingInterceptor;
 import com.companion.api.commons.interceptors.logging.LoggingMasker;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.core.lookup.MainMapLookup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -14,8 +15,10 @@ public class AuthInterceptorConfig implements WebMvcConfigurer {
 
     private final LoggingMasker loggingMasker;
 
-    public AuthInterceptorConfig(@Value("${masker.attributesToMask:}") String comaSeparatedAttributes,
+    public AuthInterceptorConfig(@Value("${application.name:}") String applicationName,
+                                 @Value("${masker.attributesToMask:}") String comaSeparatedAttributes,
                                  ObjectMapper objectMapper) {
+        MainMapLookup.setMainArguments(applicationName);
         this.loggingMasker = new LoggingMasker(comaSeparatedAttributes, objectMapper);
     }
 

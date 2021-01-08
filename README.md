@@ -117,6 +117,10 @@ All the microservices exposes rest endpoints and accept json format only
 
 ## Setup
 
+setup.sh then docker-compose up -d
+
+If there are images showed as <none> it can be deleted with `docker image prune -f`
+
 ## Logging
 
 Logging is a vital part of evey production architecture since it is sometimes our only way to understand what is 

@@ -2,21 +2,12 @@ package com.companion.api.commons.interceptors.authentication;
 
 import com.companion.api.commons.error.model.exceptions.UnauthorizedException;
 import com.companion.api.commons.external.authfast.AuthFastService;
-import com.companion.api.commons.interceptors.logging.CachedHttpServletRequest;
-import com.companion.api.commons.interceptors.logging.LoggingMasker;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.MDC;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.util.Set;
-import java.util.UUID;
 
 import static com.companion.api.commons.utils.Context.AUTHORIZATION;
 

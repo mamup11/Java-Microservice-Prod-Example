@@ -1,6 +1,5 @@
 package com.companion.api.commons.interceptors.retrofit;
 
-import com.companion.api.commons.error.model.exceptions.UnauthorizedException;
 import com.companion.api.commons.utils.Context;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -24,7 +23,7 @@ public class RetrofitLoggingInterceptor implements Interceptor {
         Optional<String> conversationIdOpt = Context.getConversationId();
 
         if (correlationIdOpt.isPresent() && conversationIdOpt.isPresent()) {
-            // Build new request with auth header
+            // Build new request with tracking headers
             request = request.newBuilder()
                     .headers(request.headers())
                     .addHeader(X_CORRELATION_ID, correlationIdOpt.orElse(null))

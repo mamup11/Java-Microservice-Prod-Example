@@ -2,12 +2,12 @@
 <Configuration level="debug">
     <Appenders>
         <Console name="Console-Appender" target="SYSTEM_OUT">
-            <JsonLayout eventEol="true" compact="false" includeStacktrace="false" includeTimeMillis="true">
+            <JsonLayout eventEol="true" compact="true" includeStacktrace="false" includeTimeMillis="true">
                 <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}"/>
                 <KeyValuePair key="X-Correlation-Id" value="$${ctx:x-correlation-id:-}"/>
                 <KeyValuePair key="X-Conversation-Id" value="$${ctx:x-conversation-id:-}"/>
                 <KeyValuePair key="clientAddress" value="$${ctx:clientAddress:-}"/>
-                <KeyValuePair key="responseTime(ms)" value="$${ctx:responseTime:-}"/>
+                <KeyValuePair key="responseTime-ms" value="$${ctx:responseTime:-}"/>
                 <KeyValuePair key="application" value="$${main:0:-Not Started}"/>
             </JsonLayout>
         </Console>
