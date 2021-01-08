@@ -1,0 +1,79 @@
+version: '2.2'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=
+      - cluster.initial_master_nodes=elasticsearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - elastic
+
+  kib01:
+    image: docker.elastic.co/kibana/kibana:7.10.1
+    container_name: kib01
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    networks:
+      - elastic
+
+  logstash:
+    image: logstash:latest
+    container_name: logstash
+    environment:
+      ELASTICSEARCH_HOSTS: elasticsearch:9200
+    networks:
+      - elastic
+
+  filebeat:
+      image: docker.elastic.co/beats/filebeat:7.10.1
+      container_name: filebeat
+      volumes:
+        - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+        - /var/lib/docker/containers:/var/lib/docker/containers:ro
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+      environment:
+        ELASTICSEARCH_HOSTS: elasticsearch:9200
+        LOGSTASH_HOSTS: logstash:5044
+      networks:
+        - elastic
+      user: root
+
+  auth-fast:
+    image: auth-fast:latest
+    container_name: auth-fast
+    ports: [8081:8080]
+    networks:
+      - core-services
+
+  products:
+    image: products:latest
+    ports: [ 8080:8080 ]
+    container_name: products
+    networks:
+      - core-services
+
+volumes:
+  data01:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge
+  core-services:
+    driver: bridge
